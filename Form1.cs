@@ -14,7 +14,7 @@ namespace TransferСalculation
 
         DayExchangec DayExchangec = new DayExchangec();
         List<DayExchangec> History;
-        int ViewDays = 90;
+        short ViewDays = 90;
 
         #region Colculation
         double RUB;
@@ -48,11 +48,15 @@ namespace TransferСalculation
 
             double[][] HistoryToMassive()
             {
-                double[][] mas = new double[3][];
-                for (int i = 0; )
-                {
+                double[][] mas = new double[2][] { new double[ViewDays], new double[ViewDays] };
 
+                for (int i = 0; i < ViewDays; i++)
+                {
+                    mas[0][i] = History[i].RUBtoTL;
+                    mas[1][i] = History[i].TLtoUSD;
                 }
+
+                return mas;
             }
         }
 

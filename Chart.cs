@@ -48,10 +48,10 @@ namespace TransferСalculation
             pictureBox.Image = Table;
         }
 
-        public void Update(int[][] Values)
+        public void Update(double[][] Values)
         {
             int palettecell = -1;
-            foreach (int[] mas in Values)
+            foreach (double[] mas in Values)
             {
                 Point[] Points = new Point[NumberOfPoles];
 
