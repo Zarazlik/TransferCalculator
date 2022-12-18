@@ -52,7 +52,7 @@ namespace TransferСalculation
 
                 for (int i = 0; i < ViewDays; i++)
                 {
-                    mas[0][i] = History[i].RUBtoTL;
+                    //mas[0][i] = ;
                     mas[1][i] = History[i].TLtoUSD;
                 }
 
