@@ -8,7 +8,7 @@ namespace TransferСalculation
     public partial class Form1 : Form
     {
         HistoryManager HistoryManager;
-        Chart Chart;
+        Chart Chart1, Chart2, Chart3;
 
         string EdgeDriverPath;
 
@@ -29,7 +29,9 @@ namespace TransferСalculation
         {
             InitializeComponent();
             new HistoryManager().GetLastDays(ViewDays);
-            Chart = new Chart(pictureBox1, ViewDays, 0, 100, 5);
+            Chart1 = new Chart(pictureBox1, ViewDays, 0, 10, 0.5f);
+            Chart2 = new Chart(pictureBox2, ViewDays, 0, 50, 5);
+            Chart3 = new Chart(pictureBox3, ViewDays, 0, 100, 5);
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -44,22 +46,34 @@ namespace TransferСalculation
             Count_USD();
 
             History = new HistoryManager().GetLastDays(ViewDays);
-            Chart.Update(HistoryToMassive());
+            HistoryToMassive();
 
-            double[][] HistoryToMassive()
+            void HistoryToMassive()
             {
-                double[][] mas = new double[2][] { new double[ViewDays], new double[ViewDays] };
+                double[] mas1 = new double[ViewDays], mas2 = new double[ViewDays], mas3 = new double[ViewDays];
 
-                for (int i = 0; i < ViewDays; i++)
+                DateOnly date = DateOnly.FromDateTime(DateTime.Now).AddDays(1);
+                for (int i = 0, j = 0; i < ViewDays; i++)
                 {
-                    //mas[0][i] = ;
-                    mas[1][i] = History[i].TLtoUSD;
+                    if (j < History.Count)
+                    {
+                        date = date.AddDays(-1);
+                        if (date == History[j].date)
+                        {
+                            mas1[i] = History[j].RUBtoTL;
+                            mas2[i] = History[j].TLtoUSD;
+                            mas3[i] = History[j].RUBtoTL * History[j].TLtoUSD;
+                            j++;
+                        }
+                    }
                 }
 
-                return mas;
+                Chart1.Update(mas1, Color.Blue);
+                Chart2.Update(mas2, Color.Red) ;
+                Chart3.Update(mas3, Color.Green);
             }
         }
-
+            
         #region Colculation
         void Count_USD(object sender, KeyEventArgs e)
         {

@@ -12,13 +12,15 @@ namespace TransferСalculation
 
     internal class Chart
     {
+        byte ChartStile;
+
         PictureBox PictureBox;
         Image Table;
 
         short NumberOfPoles;
 
         int MaxValue, MinValue;
-        int GreadVolumeStap;
+        float GreadVolumeStap;
 
         byte MinIndent = 3;
         int IndentX;
@@ -35,7 +37,7 @@ namespace TransferСalculation
             Color.LightBlue
         };
 
-        public Chart(PictureBox pictureBox, short NumberOfPoles, int MinValue, int MaxValue, int GreadVolumeStap)
+        public Chart(PictureBox pictureBox, short NumberOfPoles, int MinValue, int MaxValue, float GreadVolumeStap)
         {
             PictureBox = pictureBox;
             this.NumberOfPoles = NumberOfPoles;
@@ -48,35 +50,47 @@ namespace TransferСalculation
             pictureBox.Image = Table;
         }
 
-        public void Update(double[][] Values)
+        public void Update(double[] Values, Color color)
         {
-            int palettecell = -1;
-            foreach (double[] mas in Values)
+            Point[] Points = new Point[NumberOfPoles];
+
+            double factor = (double)(PictureBox.Height - (MinIndent * 2 + 1)) / (MaxValue - MinValue);
+
+            for (int i = 0; i < Values.Length; i++)
             {
-                Point[] Points = new Point[NumberOfPoles];
-
-                double factor = (double)(PictureBox.Height - (MinIndent * 2 + 1)) / (MaxValue - MinValue);
-
-                for (int i = 0; i < Values.Length; i++)
-                {
-                    Points[i] = new Point(PolesPositions[i] + MinIndent, (int)(PictureBox.Height - (mas[i] * factor)) - (MinIndent + 1));
-                }
-
-                palettecell++;
-                Image image = DrawChartLine(Palette[palettecell], Points);
-                PictureBox.Image = image;
+                Points[i] = new Point(PolesPositions[i] + MinIndent, (int)(PictureBox.Height - (Values[i] * factor)) - (MinIndent + 1));
             }
 
-            Image DrawChartLine(Color color, Point[] points)
+            Image image = DrawChartLine(color, Points);
+            PictureBox.Image = image;
+        }
+
+        public void Update(double[][] Values)
+        {
+            // Line
+            if (ChartStile == 0)
             {
-                Image image = Table.Clone() as Image;
-
-                using (var graphics = Graphics.FromImage(image))
+                int palettecell = -1;
+                foreach (double[] mas in Values)
                 {
-                    graphics.DrawLines(new Pen(color), points);
-                }
+                    Point[] Points = new Point[NumberOfPoles];
 
-                return image;
+                    double factor = (double)(PictureBox.Height - (MinIndent * 2 + 1)) / (MaxValue - MinValue);
+
+                    for (int i = 0; i < Values.Length; i++)
+                    {
+                        Points[i] = new Point(PolesPositions[i] + MinIndent, (int)(PictureBox.Height - (mas[i] * factor)) - (MinIndent + 1));
+                    }
+
+                    palettecell++;
+                    Image image = DrawChartLine(Palette[palettecell], Points);
+                    PictureBox.Image = image;
+                }
+            }
+            // Pillows
+            else
+            {
+
             }
         }
 
@@ -112,6 +126,20 @@ namespace TransferСalculation
                         new Point(PictureBox.Width - (MinIndent + 1), (int)(i * HorisontallLinesStep + MinIndent)));
                 }
             }
+        }
+
+        Image DrawChartLine(Color color, Point[] points)
+        {
+            Image image = Table.Clone() as Image;
+            Pen pen = new Pen(color);
+            pen.Width = 2;
+
+            using (var graphics = Graphics.FromImage(image))
+            {
+                graphics.DrawLines(pen, points);
+            }
+
+            return image;
         }
     }
 }
