@@ -8,7 +8,6 @@ namespace TransferСalculation
     public partial class Form1 : Form
     {
         HistoryManager HistoryManager;
-        Chart Chart1, Chart2, Chart3;
 
         string EdgeDriverPath;
 
@@ -29,9 +28,9 @@ namespace TransferСalculation
         {
             InitializeComponent();
             new HistoryManager().GetLastDays(ViewDays);
-            Chart1 = new Chart(pictureBox1, ViewDays, 0, 10, 0.5f);
-            Chart2 = new Chart(pictureBox2, ViewDays, 0, 50, 5);
-            Chart3 = new Chart(pictureBox3, ViewDays, 0, 100, 5);
+            //Chart1 = new Chart(pictureBox1, ViewDays, 0, 10, 0.5f);
+            //Chart2 = new Chart(pictureBox2, ViewDays, 0, 50, 5);
+            //Chart3 = new Chart(pictureBox3, ViewDays, 0, 100, 5);
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -68,9 +67,9 @@ namespace TransferСalculation
                     }
                 }
 
-                Chart1.Update(mas1, Color.Blue);
-                Chart2.Update(mas2, Color.Red) ;
-                Chart3.Update(mas3, Color.Green);
+                chart1.Update(mas1, Color.Blue);
+                chart2.Update(mas2, Color.Red) ;
+                chart3.Update(mas3, Color.Green);
             }
         }
             
